@@ -1,0 +1,20 @@
+﻿FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+WORKDIR /src
+COPY ["SpecialOffers/SpecialOffers.csproj", "SpecialOffers/"]
+RUN dotnet restore "SpecialOffers/SpecialOffers.csproj"
+COPY . .
+WORKDIR "/src/SpecialOffers"
+RUN dotnet build "SpecialOffers.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "SpecialOffers.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "SpecialOffers.dll"]

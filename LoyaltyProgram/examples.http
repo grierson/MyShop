@@ -1,0 +1,10 @@
+POST /users HTTP/1.1
+Host: localhost:5000
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name":"Christian",
+  "loyaltyPoints":0,
+  "settings":{ "interests" : ["whisky", "cycling"] }
+}
